@@ -1,37 +1,103 @@
-## This setup includes:
+# 🧠 Laravel Whisper - Offline Speech to Text API (Docker + Whisper CLI)
 
-✅ Laravel app
-✅ Python + Whisper CLI installed
-✅ FFmpeg
-✅ API to upload and transcribe audio using Whisper
-✅ Volume mount for sharing audio files
+This project provides an offline, open-source speech-to-text (STT) API using Laravel, Python, OpenAI's Whisper, and Docker.
 
+---
 
-## Project Structure
+## ✅ This setup includes:
+
+- ✅ Laravel app (PHP 8.2)
+- ✅ Python + Whisper CLI installed
+- ✅ FFmpeg for audio handling
+- ✅ API to upload and transcribe audio using Whisper
+- ✅ Docker volume mount for sharing files across app
+
+---
+
+## 📁 Project Structure
+
+```
 laravel-whisper/
 ├── app/
-│   └── (Laravel app will be here)
+│   ├── Http/
+│   │   └── Controllers/
+│   │       └── SpeechController.php
+│   ├── routes/
+│   │   └── web.php
 ├── docker/
 │   └── whisper.dockerfile
 ├── docker-compose.yml
 ├── .env
 └── README.md
+```
 
+---
 
-## Run it!
+## 🚀 Run it!
+
+```bash
 cd laravel-whisper
 docker-compose up --build
+```
 
+Laravel will be running at: [http://localhost:8000](http://localhost:8000)
 
-## Test it with CURL
-`curl -X POST http://localhost:8000/speech-to-text \
-  -F "audio=@/full/path/to/your/audio.mp3"`
+---
 
-## Notes
-Whisper runs inside Docker — no internet or API required.
+## 🧪 Test it with CURL
 
-For best performance, use audio at 16kHz or higher.
+```bash
+curl -X POST http://localhost:8000/speech-to-text \
+  -F "audio=@/full/path/to/your/audio.mp3"
+```
 
-If needed, convert audio using ffmpeg:
+Or use a browser form with:
 
-`ffmpeg -i input.mp3 -ar 16000 output.wav`
+```html
+<form action="/speech-to-text" method="POST" enctype="multipart/form-data">
+  <input type="file" name="audio" accept="audio/*" required>
+  <button type="submit">Transcribe</button>
+</form>
+```
+
+---
+
+## 📝 Notes
+
+- ✅ Whisper runs inside Docker — no internet or API key required.
+- 🔊 For best results, use audio at **16kHz or higher**.
+- 🎧 Recommended formats: `.mp3`, `.wav`, `.flac`
+
+---
+
+## 🎛️ Convert audio with FFmpeg
+
+```bash
+ffmpeg -i input.mp3 -ar 16000 output.wav
+```
+
+---
+
+## 🤖 Powered by
+
+- [Laravel](https://laravel.com/)
+- [OpenAI Whisper](https://github.com/openai/whisper)
+- [Docker](https://www.docker.com/)
+- [FFmpeg](https://ffmpeg.org/)
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+## 📬 Want More?
+
+Let us know if you want:
+- GPU-enabled Whisper Dockerfile
+- Blade frontend uploader
+- Text-to-speech integration
+
+PRs and contributions welcome!
