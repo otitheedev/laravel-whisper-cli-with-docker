@@ -1,22 +1,33 @@
+# docker/whisper.dockerfile
+
 FROM php:8.2-cli
 
-# System packages
-RUN apt-get update && \
-    apt-get install -y \
-    git zip unzip ffmpeg python3 python3-pip python3-venv
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    zip \
+    curl \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    ffmpeg \
+    libsndfile1 \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Composer
+# Create virtualenv for whisper
+RUN python3 -m venv /opt/venv
+
+# Upgrade pip and install whisper
+RUN /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install git+https://github.com/openai/whisper.git
+
+# Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
-# Whisper installation
-RUN pip3 install git+https://github.com/openai/whisper.git
-
-# Create app folder
+# Set working directory
 WORKDIR /var/www
 
-# Laravel needs these
-RUN curl -sS https://getcomposer.org/installer | php && \
-    php composer.phar create-project laravel/laravel .
-
-# Set file permissions
-RUN chown -R www-data:www-data /var/www
+# Add Laravel and app source via docker-compose bind mount
